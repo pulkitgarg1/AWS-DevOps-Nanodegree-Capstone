@@ -1,0 +1,36 @@
+---
+kind: ReplicationController
+apiVersion: v1
+metadata:
+    name: udagram
+    labels:
+        app: udagram
+spec:
+    replicas: 1
+    selector:
+        app: udagram
+    template:
+        metadata:
+            labels:
+                app: udagram
+        spec:
+            containers:
+                - name: udagram
+                  image: gargpulkit/udagram_app
+                  ports:
+                      - name: http-server
+                        containerPort: 80
+---
+kind: Service
+apiVersion: v1
+metadata:
+    name: rollingdeployment
+    labels:
+        app: rollingdeployment
+spec:
+    ports:
+        - port: 8000
+          targetPort: 80
+    selector:
+        app: udagram
+    type: LoadBalancer
